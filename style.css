@@ -3,29 +3,41 @@ main {
 }
 
 .container {
-	width: 600px;
-	height: 400px;
 	background: #eeeaef; /* For browsers that do not support gradients */
     background: -webkit-linear-gradient(#eeeaef, #bdbcc6); /* For Safari 5.1 to 6.0 */
     background: -o-linear-gradient(#eeeaef, #bdbcc6); /* For Opera 11.1 to 12.0 */
     background: -moz-linear-gradient(#eeeaef, #bdbcc6); /* For Firefox 3.6 to 15 */
     background: linear-gradient(#eeeaef, #bdbcc6); /* Standard syntax */
-    margin-left: auto;
-  	margin-right: auto;
+    margin-left: 100px;
+    padding-right: 20px;
+    display: inline-block;
   	 
 }
 
 #value-number, .category {
 	display: inline-block;
 	margin-top: 60px;
-	margin-left: 5px;
+	margin-left: 10px;
+}
+
+.container__left {
+    margin-left: 10px;
+    margin-right: 20px;
 }
 
 .instructions {
-    position: relative;
-    top: 300px;
-    left: 350px;
-    top: 290px;
-    left: 350px;
+    margin-top: 10px;
     font-style: italic;
+    max-width: 230px;
+}
+
+#circle {
+	position: relative;
+    border-radius:100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.container__right, .container__left {
+    display: inline-block;
 }
