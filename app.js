@@ -1,22 +1,38 @@
-var options = {
-	slider__1 : {
-		container: 'con1',
-		color: 'blue',
-		maxValue: '100',
-		minVvalue: '0',
-		step: '1',
-		radius: '30px'
-	},
+var options = [
+	       {
+      		container: 'con1',
+      		color: 'blue',
+      		maxValue: '100',
+      		minValue: '0',
+      		step: '1',
+      		radius: '30px',
+          category: 'Transport'
+	       }
+        ]
+
+var displayCircle = function(options) {
+  var circle = document.querySelector('#circle');
+
+  circle.style.setProperty('border', '2px solid ' + options[0].color);
+  circle.style.setProperty('width', options[0].radius);
+  circle.style.setProperty('height', options[0].radius);
 }
 
+displayCircle(options);
 
 
-$('#circle').css({'border': '2px solid blue'});
-$('#circle').css({'width': '30px'}); //radius
-$('#circle').css({'height': '30px'}); //radius
-$('input[name="angle"]').attr( "data-max", "100"); 
-$('input[name="angle"]').attr( "data-min", "0"); 
-$('input[name="angle"]').attr( "data-step", "1"); 
+var displayInput = function(options, element) {
+    var inputElement='';
+    var inputElement = '<input id="value-number" type="text" value="0"' + 
+    ' class="range" data-max="' + options[0].maxValue + '" data-min="' + options[0].minValue +
+     '"data-step="' + options[0].step +'" name="angle"><div class="category">' + options[0].category +
+          '</div>';
+  
+
+    return element.html(inputElement);
+} 
+
+displayInput(options, $('.js-container__left')); 
 
 
 
@@ -59,5 +75,6 @@ var circulate = function() {
 
 $(function(){ 
   circulate();
+
 });
 
