@@ -2,6 +2,11 @@ main {
 	padding-top: 60px;
 }
 
+/*.wrapper {
+    margin-left: auto;
+    margin-right: auto;
+} */
+
 .container {
 	background: #eeeaef; /* For browsers that do not support gradients */
     background: -webkit-linear-gradient(#eeeaef, #bdbcc6); /* For Safari 5.1 to 6.0 */
@@ -16,13 +21,16 @@ main {
 
 #value-number, .category {
 	display: inline-block;
-	margin-top: 60px;
 	margin-left: 10px;
 }
 
 .container__left {
     margin-left: 10px;
     margin-right: 20px;
+}
+
+.container__right, .container__left {
+    display: inline-block;
 }
 
 .instructions {
@@ -33,11 +41,39 @@ main {
 
 #circle {
 	position: relative;
-    border-radius:100%;
+    border-radius: 100%;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 20px;
 }
 
-.container__right, .container__left {
-    display: inline-block;
+#slider { 
+  position: relative; 
+  height: 15px; 
+  width: 15px; 
+  background: #666; 
+  left: 8px; 
+  top:-8px; 
+  border-radius: 100%;
+  cursor: pointer;
 }
+
+input[type="text"] {
+    
+    -moz-appearance: none;
+    border: none;
+    display: block;
+    font-size: 1em;
+    height: 30px;
+    padding:0 6px;
+    transition: border 0s ease 0s, width 0.4s ease-in-out 0s;
+    background-color: inherit;
+    
+}
+
+.range{
+  float:left;
+  width:30px;
+}
+
+
