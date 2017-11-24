@@ -1,3 +1,7 @@
+/*html {
+  --slider-border: 2px solid red;
+}
+*/
 main {
 	padding-top: 60px;
 }
@@ -8,7 +12,7 @@ main {
 } */
 
 .container {
-	background: #eeeaef; /* For browsers that do not support gradients */
+	  background: #eeeaef; /* For browsers that do not support gradients */
     background: -webkit-linear-gradient(#eeeaef, #bdbcc6); /* For Safari 5.1 to 6.0 */
     background: -o-linear-gradient(#eeeaef, #bdbcc6); /* For Opera 11.1 to 12.0 */
     background: -moz-linear-gradient(#eeeaef, #bdbcc6); /* For Firefox 3.6 to 15 */
@@ -24,12 +28,12 @@ main {
 	margin-left: 10px;
 }
 
-.container__left {
+.js-container__left {
     margin-left: 10px;
     margin-right: 20px;
 }
 
-.container__right, .container__left {
+.container__right, .js-container__left {
     display: inline-block;
 }
 
@@ -40,11 +44,13 @@ main {
 }
 
 #circle {
-	position: relative;
+	  position: relative;
+    border: 2px solid red;
     border-radius: 100%;
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
+
 }
 
 #slider { 

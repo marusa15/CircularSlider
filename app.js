@@ -7,10 +7,29 @@ var options = [
       		step: '1',
       		radius: '30px',
           category: 'Transport'
-	       }
+	       },
+         {
+          container: 'con1',
+          color: 'green',
+          maxValue: '1000',
+          minValue: '250',
+          step: '5',
+          radius: '30px',
+          category: 'Food'
+         }
         ]
 
-var displayCircle = function(options) {
+var displayCircle = function(options, element) {
+  var circleElement='';
+  var circleElement='<div id="circle"><div id="slider"></div></div><div class="instructions">' +
+  'Adjust dial to enter expenses</div>';  
+  
+  return element.html(circleElement);
+}
+
+displayCircle(options, $('.js-container'));
+
+var addCSSProperties = function(options) {
   var circle = document.querySelector('#circle');
 
   circle.style.setProperty('border', '2px solid ' + options[0].color);
@@ -18,7 +37,7 @@ var displayCircle = function(options) {
   circle.style.setProperty('height', options[0].radius);
 }
 
-displayCircle(options);
+addCSSProperties(options);
 
 
 var displayInput = function(options, element) {
