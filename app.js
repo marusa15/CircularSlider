@@ -31,27 +31,7 @@ var options = [
          }
         ]
 
-// state modification functions
 
-var addCSSProperties = function(options) {
-  var circle = document.querySelector('#circle-1');
-
-  circle.style.setProperty('border', '2px solid ' + options[0].color);
-  circle.style.setProperty('width', options[0].radius);
-  circle.style.setProperty('height', options[0].radius);
-
-  var circle = document.querySelector('#circle-2');
-
-  circle.style.setProperty('border', '2px solid ' + options[1].color);
-  circle.style.setProperty('width', options[1].radius);
-  circle.style.setProperty('height', options[1].radius);
-
-  var circle = document.querySelector('#circle-3');
-
-  circle.style.setProperty('border', '2px solid ' + options[2].color);
-  circle.style.setProperty('width', options[2].radius);
-  circle.style.setProperty('height', options[2].radius);
-}
 
 var clickCircle = function(options, item) {
 
