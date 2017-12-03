@@ -12,14 +12,16 @@
   <link rel="stylesheet" type="text/css" href="normalize.css">
 </head>
 
-	<body>
+	<body onload="draw();">
 	<main>
+
 		<div class='wrapper'>
 		<div id='con1' class='container'>
 			
 			    <div class='js-container__left'></div>
 				
-				<div class='container__right js-container'>  
+				<div class='container__right js-container'>
+				<canvas id="c-circle" width="200" height="200"></canvas>
 			  	</div>
 			
 		</div>
@@ -27,7 +29,8 @@
 
 		
 	</main> 
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"> </script>
+	<!--	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"> </script> -->
+		 <script   src="https://code.jquery.com/jquery-3.1.1.js"   integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA="   crossorigin="anonymous"></script>
 		<script type="text/javascript" src="app.js"></script>
 	</body>
 </html>
