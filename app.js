@@ -69,12 +69,30 @@ function draw(hue, radius) {
 
         ctx.strokeStyle = hue;
         ctx.lineWidth = 15;
+        ctx.setLineDash([0, 0]); 
+        ctx.globalAlpha = 0.5;
         ctx.beginPath();
         ctx.arc(95,95,radius,startAngle, startAngle + part*endAngle);
         ctx.stroke();
+
+        // round slider
+
+        ctx.strokeStyle = '#afb1b5';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([0, 0]);
+         ctx.globalAlpha = 1;        
+        ctx.beginPath();
+        ctx.arc(95,25,9.5,startAngle, endAngle);
+        ctx.fill();
+        ctx.fillStyle = '#ffffff';
+        ctx.stroke();
+       
+
       }
 
 draw('#9c6fdb', 70);
+
+
 
  
 var displayCircle = function(options, element) {
