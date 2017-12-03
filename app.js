@@ -69,18 +69,32 @@ function getItem(options, itemIndex) {
 
 // display functions
 
-function draw() {
+function draw(hue, radius) {
         var canvas = document.getElementById('c-circle');
         var ctx = canvas.getContext('2d');
+        var startAngle = -0.5*Math.PI;
+        var endAngle = 2*Math.PI;
+        var part = 0.1;
+
+        // full grey circle for background
         ctx.strokeStyle = '#afb1b5';
         ctx.lineWidth = 15;
         ctx.setLineDash([5, 1]);
         ctx.lineDashOffset = 5;
         ctx.beginPath();
-        ctx.arc(95,95,40,0,2*Math.PI);
+        ctx.arc(95,95,radius,startAngle,endAngle);
         ctx.stroke();
 
+        // part of circle in color
+
+        ctx.strokeStyle = hue;
+        ctx.lineWidth = 15;
+        ctx.beginPath();
+        ctx.arc(95,95,radius,startAngle, startAngle + part*endAngle);
+        ctx.stroke();
       }
+
+draw('#9c6fdb', 70);
 
  
 var displayCircle = function(options, element) {
