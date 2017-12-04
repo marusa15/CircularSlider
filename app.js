@@ -49,76 +49,105 @@ function getItem(options, itemIndex) {
 
 // display functions
 
-function draw(hue, radius) {
+var startAngle = -0.5*Math.PI;
+var endAngle = 2*Math.PI;
+
+function drawCircle(radius, x_slider, y_slider) {
         var canvas = document.getElementById('c-circle');
         var ctx = canvas.getContext('2d');
-        var startAngle = -0.5*Math.PI;
-        var endAngle = 2*Math.PI;
-        var part = 0.1;
-
-        // full grey circle for background
+            
+     
         ctx.strokeStyle = '#afb1b5';
         ctx.lineWidth = 15;
         ctx.setLineDash([5, 1]);
         ctx.lineDashOffset = 5;
         ctx.beginPath();
-        ctx.arc(95,95,radius,startAngle,endAngle);
+        ctx.arc(100,100,radius,startAngle,endAngle);
         ctx.stroke();
 
+        ctx.strokeStyle = '#afb1b5';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([0, 0]);
+        ctx.globalAlpha = 1;        
+        ctx.beginPath();
+        ctx.arc(100,30,9.5,startAngle,endAngle);
+        ctx.fill();
+        ctx.fillStyle = '#ffffff';
+        ctx.stroke();
+}
         // part of circle in color
+function colorCircle(hue, radius, part) {
+        var canvas = document.getElementById('c-circle');
+        var ctx = canvas.getContext('2d');
+        
 
         ctx.strokeStyle = hue;
         ctx.lineWidth = 15;
         ctx.setLineDash([0, 0]); 
         ctx.globalAlpha = 0.5;
         ctx.beginPath();
-        ctx.arc(95,95,radius,startAngle, startAngle + part*endAngle);
+        ctx.arc(100,100,radius,startAngle, startAngle + part*endAngle);
         ctx.stroke();
-
-        // round slider
-
-        ctx.strokeStyle = '#afb1b5';
-        ctx.lineWidth = 1;
-        ctx.setLineDash([0, 0]);
-         ctx.globalAlpha = 1;        
-        ctx.beginPath();
-        ctx.arc(95,25,9.5,startAngle, endAngle);
-        ctx.fill();
-        ctx.fillStyle = '#ffffff';
-        ctx.stroke();
+}
+       
        
 
+      
+
+drawCircle(70);
+
+
+var moveSlider = function(element) {
+
+      //  var $slider = $('#slider-' + i);
+    
+        var sliderW2 = 4.75;
+         // shrani v spremenljivko širino drsne ploščice brez enote in deli z dva (radij)
+        var sliderH2 = 4.75;  
+
+       
+        
+      //  var diameter = parseInt(options[itemIndex].radius, 10);
+      //  var radius = diameter/2;
+        var radius = 70; 
+        var deg = 0;
+        var elP = element.offset(); 
+        var elPos = { x: elP.left, y: elP.top};   //dobi koordinate kvadrata 200x200 glede na dokument 
+        console.log(elPos);
+        
+        
+        var X = 0, Y = 0;
+        var mdown = false;
+
+        $('#c-circle').mousedown(function (event){ mdown = true; })
+                    .mouseup(function (event) { mdown = true; })
+                    .mousemove(function (event) {
+                        if (mdown) {
+                           var mPos = {x: event.clientX-elPos.x, y: event.clientY-elPos.y}; // polozaj x in y koordinate miske
+                           console.log(mPos);
+                           var atan = Math.atan2(mPos.x-radius, mPos.y-radius); // Math.atan2() vrne kot med x osjo in točko (x,y)
+                           deg = -atan/(Math.PI/180) + 180; // final (0-360 positive) degrees from mouse position 
+                           console.log('degrees', deg);
+
+                           var part = deg / 360;
+                           console.log('part', part);
+
+                           colorCircle('#9c6fdb', 70, part);
+                            
+                           X = Math.round(radius* Math.sin(deg*Math.PI/180));    
+                           Y = Math.round(radius*  -Math.cos(deg*Math.PI/180));
+
+                          
+                        }
+                    });
       }
 
-draw('#9c6fdb', 70);
+moveSlider($('#c-circle'));
+
+
 
 
 
  
-var displayCircle = function(options, element) {
-  var circleInstance = $('<div class="circle" id="circle-1" circle-id="1"><div id="slider-1" class="slider"></div></div>');
-
-  for(var i = 2; i <= options.length; i++) {
-    circleInstance = circleInstance.append('<div class="circle" circle-id="' + i + '" id="circle-' 
-      + i + '"><div class="slider" id="slider-' + i +
-     '"></div></div>');
-    
-  }
-    element.append(circleInstance);
-  } 
-
-
-
-
-var displayInput = function(options, element) {
-    var inputElement='';
-    var inputElement = '<input id="value-number" type="text" value="0"' + 
-    ' class="range" data-max="' + options[0].maxValue + '" data-min="' + options[0].minValue +
-     '"data-step="' + options[0].step +'" name="angle"><div class="category">' + options[0].category +
-          '</div>';
-  
-
-    return element.html(inputElement);
-} 
 
 
