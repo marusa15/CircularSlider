@@ -49,6 +49,11 @@ function getItem(options, itemIndex) {
 
 // display functions
 
+document.body.onload = function() {
+drawCircle();
+drawSlider(100, 30);
+};
+
 var startAngle = -0.5*Math.PI;
 var endAngle = 2*Math.PI;
 
@@ -64,19 +69,23 @@ function drawCircle(radius, x_slider, y_slider) {
         ctx.beginPath();
         ctx.arc(100,100,radius,startAngle,endAngle);
         ctx.stroke();
+}
 
         // sliding button
+function drawSlider(X,Y) {
+        var canvas = document.getElementById('c-circle');
+        var ctx = canvas.getContext('2d');
 
         ctx.strokeStyle = '#afb1b5';
         ctx.lineWidth = 1;
         ctx.setLineDash([0, 0]);
-        ctx.globalAlpha = 1;        
         ctx.beginPath();
-        ctx.arc(100,30,9.5,startAngle,endAngle);
-        ctx.fill();
+        ctx.arc(X,Y,9.5,startAngle,endAngle);
         ctx.fillStyle = '#ffffff';
+        ctx.fill();
         ctx.stroke();
 }
+
         // part of circle in color
 function colorCircle(hue, radius, part) {
         var canvas = document.getElementById('c-circle');
