@@ -147,7 +147,8 @@ var moveSlider = function(element) {
                            X = Math.round(radius* Math.sin(deg*Math.PI/180));    
                            Y = Math.round(radius*  -Math.cos(deg*Math.PI/180));
 
-                            
+                           // PRINT DEGREES
+                           $('input[name="angle"]').val(Math.ceil(deg));                            
                           
                         }
                     });
