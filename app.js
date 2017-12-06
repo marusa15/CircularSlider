@@ -54,8 +54,6 @@ drawCircle();
 drawSlider(100, 30);
 };
 
-var startAngle = -0.5*Math.PI;
-var endAngle = 2*Math.PI;
 
 function drawCircle(radius, x_slider, y_slider) {
         var canvas = document.getElementById('c-circle');
@@ -67,7 +65,8 @@ function drawCircle(radius, x_slider, y_slider) {
         ctx.setLineDash([5, 1]);
         ctx.lineDashOffset = 5;
         ctx.beginPath();
-        ctx.arc(100,100,radius,startAngle,endAngle);
+        ctx.arc(100,100,radius,-0.5*Math.PI,2*Math.PI);
+
         ctx.stroke();
 }
 
@@ -76,34 +75,50 @@ function drawSlider(X,Y) {
         var canvas = document.getElementById('c-circle');
         var ctx = canvas.getContext('2d');
 
+        
         ctx.strokeStyle = '#afb1b5';
         ctx.lineWidth = 1;
         ctx.setLineDash([0, 0]);
+        
+       
         ctx.beginPath();
-        ctx.arc(X,Y,9.5,startAngle,endAngle);
+        ctx.arc(X,Y,9.5,-0.5*Math.PI,2*Math.PI);
+        
+       
         ctx.fillStyle = '#ffffff';
         ctx.fill();
         ctx.stroke();
 }
+
+function cutSlider(x, y, radius){
+    var canvas = document.getElementById('c-circle');
+    var ctx = canvas.getContext('2d');
+
+    ctx.globalCompositeOperation = 'destination-out'
+    ctx.beginPath();
+    ctx.arc(100, 30, 9.5, startAngle, endAngle);
+    ctx.fill();
+}
+
 
         // part of circle in color
 function colorCircle(hue, radius, part) {
         var canvas = document.getElementById('c-circle');
         var ctx = canvas.getContext('2d');
         
+        var startAngle = -0.5*Math.PI;
 
         ctx.strokeStyle = hue;
         ctx.lineWidth = 15;
         ctx.setLineDash([0, 0]); 
         ctx.globalAlpha = 0.5;
         ctx.beginPath();
-        ctx.arc(100,100,radius,startAngle, startAngle + part*endAngle);
-        ctx.stroke();
+        ctx.arc(100,100,radius,startAngle, part);
+        ctx.stroke();        
 }
-       
-       
 
-      
+       
+    
 
 drawCircle(70);
 
@@ -130,9 +145,13 @@ var moveSlider = function(element) {
         var X = 0, Y = 0;
         var mdown = true;
 
+
+
         $('#c-circle').click(function (event) {
                         if (mdown) {
                            var mPos = {x: event.clientX-elPos.x-30, y: event.clientY-elPos.y-30}; // polozaj x in y koordinate miske
+
+                           // event.prevent default in stop propagation morda da se movementi ne razširijo preveč.
                            
                            console.log('client', event.clientX, event.clientY);
                            console.log('mouseposition', mPos.x, mPos.y);
@@ -142,19 +161,20 @@ var moveSlider = function(element) {
                            console.log('-atan/(Math.PI/180)',-atan/(Math.PI/180));
                            console.log('degrees', deg);
                            
-                           console.log('part', part);
-
-                           var part = deg / 360;
-                           console.log('part', part);
-
                            
+                           var part = -0.5*Math.PI + deg * (Math.PI/180);
 
-                           colorCircle('#9c6fdb', 70, part);
-
-                       //    $slider.css({ left: X+radius-sliderW2, top: Y+radius-sliderH2 });              
+                          
+                           colorCircle('#9c6fdb', 70, part);                                                            
                             
                            X = Math.round(radius* Math.sin(deg*Math.PI/180));    
                            Y = Math.round(radius*  -Math.cos(deg*Math.PI/180));
+                           
+                          // cutSlider(100,30,9.5);
+                           drawSlider(X+100,Y+100); //add the center of circle coordinates
+                                                  
+
+                         
 
                            // PRINT DEGREES
                            $('input[name="angle"]').val(Math.ceil(deg));                            
