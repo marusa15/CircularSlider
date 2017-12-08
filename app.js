@@ -35,29 +35,30 @@ var options = [
 
 document.body.onload = function() {
 
-myCircle.draw(100, 100, 70);
+myCircle.draw(100, 100, 70, '#afb1b5');
 drawSlider(100, 30);
 
 };
 
-function Circle(x, y, radius) {
+function Circle(x, y, radius, color, lineWidth) {
   this.x = x || 100;
   this.y = y || 100;
   this.radius = radius || 70;
   this.startAngle = -0.5*Math.PI;
   this.endAngle = 2*Math.PI;
-  
+  this.color = color || '#afb1b5';
+  this.lineWidth = lineWidth || 15;
 }
 
 var myCircle = new Circle();
 
-// Draws this shape to a given context
+
 Circle.prototype.draw = function(ctx) {
           var canvas = document.getElementById('c-circle');
           var ctx = canvas.getContext('2d');
               
        
-          ctx.strokeStyle = '#afb1b5';
+          ctx.strokeStyle = this.color;
           ctx.lineWidth = 15; // does not affect the radius, goes 7.5 out and 7.5 in
           ctx.setLineDash([5, 1]);
           ctx.lineDashOffset = 5;
@@ -77,6 +78,7 @@ function drawSlider(X,Y) {
         ctx.strokeStyle = '#afb1b5';
         ctx.lineWidth = 1;
         ctx.setLineDash([0, 0]);
+        ctx.globalAlpha = 1;
         
        
         ctx.beginPath();
@@ -86,6 +88,13 @@ function drawSlider(X,Y) {
         ctx.fillStyle = '#ffffff';
         ctx.fill();
         ctx.stroke();
+}
+
+function clear() {
+    var canvas = document.getElementById('c-circle');
+    var ctx = canvas.getContext('2d');
+  
+    ctx.clearRect(0,0, 200, 200);
 }
 
 
@@ -105,145 +114,16 @@ function colorCircle(hue, radius, part) {
         ctx.stroke();        
 }
 
- 
-      
-    
+function CanvasState(canvas) {
+  this.canvas = canvas;
+  this.valid = false; 
+  var myState = this;
+  this.interval = 30;
+  setInterval(function(){ myState.draw(); }, myState.interval);
 
-/*
-
-var canvasState = function(canvas) {
-        this.valid = false; // when set to true, the canvas will redraw everything
-        this.shapes = [];  // the collection of things to be drawn - imeli bom več krogov različnih
-        this.dragging = false; // Keep track of when we are dragging
-        // the current selected object.
-        // In the future we could turn this into an array for multiple selection
-        this.selection = null;
-        this.dragoffx = 0; // See mousedown and mousemove events for explanation
-        this.dragoffy = 0;
-
-        // Right here "this" means the CanvasState. But we are making events on the Canvas itself,
-        // and when the events are fired on the canvas the variable "this" is going to mean the canvas!
-        // Since we still want to use this particular CanvasState in the events we have to save a reference to it.
-        // This is our reference!
-        var myState = this;
-        
-        //fixes a problem where double clicking causes text to get selected on the canvas
-        canvas.addEventListener('selectstart', function(e) { e.preventDefault(); return false; }, false); //
-        // Up, down, and move are for dragging
-        canvas.addEventListener('mousedown', function(e) {
-          var mouse = myState.getMouse(e);
-          var mx = mouse.x;
-          var my = mouse.y;
-          var shapes = myState.shapes;
-          var l = shapes.length;
-          for (var i = l-1; i >= 0; i--) {
-            if (shapes[i].contains(mx, my)) {
-              var mySel = shapes[i];
-              // Keep track of where in the object we clicked
-              // so we can move it smoothly (see mousemove)
-              myState.dragoffx = mx - mySel.x;
-              myState.dragoffy = my - mySel.y;
-              myState.dragging = true;
-              myState.selection = mySel;
-              myState.valid = false;
-              return;
-            }
-          }
-          // havent returned means we have failed to select anything.
-          // If there was an object selected, we deselect it
-          if (myState.selection) {
-            myState.selection = null;
-            myState.valid = false; // Need to clear the old selection border
-          }
-        }, true);
-        canvas.addEventListener('mousemove', function(e) {
-          if (myState.dragging){
-            var mouse = myState.getMouse(e);
-            // We don't want to drag the object by its top-left corner,
-            // we want to drag from where we clicked.
-            // Thats why we saved the offset and use it here
-            myState.selection.x = mouse.x - myState.dragoffx;
-            myState.selection.y = mouse.y - myState.dragoffy;   
-            myState.valid = false; // Something's dragging so we must redraw
-          }
-        }, true);
-        canvas.addEventListener('mouseup', function(e) {
-            myState.dragging = false;
-          }, true);
-        // add the click event as well
-
-        // **** Options! ****
-          
-          
-          this.interval = 30;
-          setInterval(function() { myState.draw(); }, myState.interval);
-
-          // While draw is called as often as the INTERVAL variable demands,
-          // It only ever does something if the canvas gets invalidated by our code
-          CanvasState.prototype.draw = function() {
-            // if our state is invalid, redraw and validate!
-            if (!this.valid) {
-              var ctx = this.ctx;
-              var shapes = this.shapes;
-              this.clear();
-              
-              // ** Add stuff you want drawn in the background all the time here **
-              // grey circle
-              
-              // draw all shapes
-              var l = shapes.length;
-              for (var i = 0; i < l; i++) {
-                var shape = shapes[i];
-                // We can skip the drawing of elements that have moved off the screen:
-                if (shape.x > this.width || shape.y > this.height ||
-                    shape.x + shape.w < 0 || shape.y + shape.h < 0) continue;
-                shapes[i].draw(ctx);
-              }
-              
-              // draw selection
-              // right now this is just a stroke along the edge of the selected Shape
-              if (this.selection != null) {
-                ctx.strokeStyle = this.selectionColor;
-                ctx.lineWidth = this.selectionWidth;
-                var mySel = this.selection;
-                ctx.strokeRect(mySel.x,mySel.y,mySel.w,mySel.h);
-              }
-              
-              // ** Add stuff you want drawn on top all the time here **
-              
-              this.valid = true;
-            }
-
-            // Creates an object with x and y defined,
-
-              // set to the mouse position relative to the state's canvas
-              // If you wanna be super-correct this can be tricky,
-              // we have to worry about padding and borders
-              CanvasState.prototype.getMouse = function(e) {
-                var element = this.canvas, offsetX = 0, offsetY = 0, mx, my;
-                
-                // Compute the total offset
-                if (element.offsetParent !== undefined) {
-                  do {
-                    offsetX += element.offsetLeft;
-                    offsetY += element.offsetTop;
-                  } while ((element = element.offsetParent));
-                }
-
-                // Add padding and border style widths to offset
-                // Also add the offsets in case there's a position:fixed bar
-                offsetX += this.stylePaddingLeft + this.styleBorderLeft + this.htmlLeft;
-                offsetY += this.stylePaddingTop + this.styleBorderTop + this.htmlTop;
-
-                mx = e.pageX - offsetX;
-                my = e.pageY - offsetY;
-                
-                // We return a simple javascript object (a hash) with x and y defined
-                return {x: mx, y: my};
-              }
-                        }
 }
-*/
+
+
 
 var moveSlider = function(element) {
 
@@ -286,7 +166,9 @@ var moveSlider = function(element) {
                            
                            var part = -0.5*Math.PI + deg * (Math.PI/180);
 
-                          
+                           clear();
+
+                           myCircle.draw(100, 100, 70, '#afb1b5');
                            colorCircle('#9c6fdb', 70, part);                                                            
                             
                            X = Math.round(radius* Math.sin(deg*Math.PI/180));    
@@ -303,7 +185,9 @@ var moveSlider = function(element) {
                           
                         }
                     });
-      }
+          
+
+      } 
 
 moveSlider($('#c-circle'));
 
