@@ -5,7 +5,7 @@ var options = [
       		maxValue: '100',
       		minValue: '0',
       		step: '1',
-      		radius: '30px',
+      		radius: '30', //in pixels
           category: 'Transport',
           clicked: 'false'
 	       },
@@ -15,7 +15,7 @@ var options = [
           maxValue: '1000',
           minValue: '250',
           step: '1',
-          radius: '60px',
+          radius: '60',
           category: 'Food',
           clicked: 'false'
          },
@@ -25,47 +25,51 @@ var options = [
           maxValue: '1000',
           minValue: '250',
           step: '5',
-          radius: '100px',
+          radius: '90',
           category: 'Food',
           clicked: 'false'
          }
         ]
 
+// state modification functions
+
+var clickCircle = function(options, item) {
+   currentItem = getItem(options, item);
+   options.Current = item;
+   options[item].clicked = true;
+}
+ 
+function getItem(options, itemIndex) {
+    return options[itemIndex];    
+ }
+
+
+var canvas = document.getElementById('c-circle');
+x0 = canvas.width / 2;
+y0 = canvas.height / 2;
+
 // display functions
 
-document.body.onload = function() {
+document.body.onload = function(radius) {
 
-myCircle.draw(100, 100, 70, '#afb1b5');
-drawSlider(100, 30);
+  drawCircle(radius);
+  drawSlider(x0, x0 - radius); // (100, 30) is initial position 30 = 100 - radius
+
 
 };
 
-function Circle(x, y, radius, color, lineWidth) {
-  this.x = x || 100;
-  this.y = y || 100;
-  this.radius = radius || 70;
-  this.startAngle = -0.5*Math.PI;
-  this.endAngle = 2*Math.PI;
-  this.color = color || '#afb1b5';
-  this.lineWidth = lineWidth || 15;
-}
-
-var myCircle = new Circle();
-
-
-Circle.prototype.draw = function(ctx) {
-          var canvas = document.getElementById('c-circle');
-          var ctx = canvas.getContext('2d');
-              
-       
-          ctx.strokeStyle = this.color;
-          ctx.lineWidth = 15; // does not affect the radius, goes 7.5 out and 7.5 in
-          ctx.setLineDash([5, 1]);
-          ctx.lineDashOffset = 5;
-          ctx.beginPath();
-          ctx.arc(100,100,this.radius,-0.5*Math.PI,2*Math.PI);
-
-          ctx.stroke();
+function drawCircle(radius) {
+        var canvas = document.getElementById('c-circle');
+        var ctx = canvas.getContext('2d');
+            
+     
+        ctx.strokeStyle = '#afb1b5';
+        ctx.lineWidth = 15; // does not affect the radius, goes 7.5 out and 7.5 in
+        ctx.setLineDash([5, 1]);
+        ctx.lineDashOffset = 5;
+        ctx.beginPath();
+        ctx.arc(x0,y0,radius,-0.5*Math.PI,2*Math.PI);
+        ctx.stroke();
 }
 
 
@@ -94,7 +98,7 @@ function clear() {
     var canvas = document.getElementById('c-circle');
     var ctx = canvas.getContext('2d');
   
-    ctx.clearRect(0,0, 200, 200);
+    ctx.clearRect(0,0, canvas.width, canvas.height);
 }
 
 
@@ -110,15 +114,17 @@ function colorCircle(hue, radius, part) {
         ctx.setLineDash([0, 0]); 
         ctx.globalAlpha = 0.5;
         ctx.beginPath();
-        ctx.arc(100,100,radius,startAngle, part);
+        ctx.arc(x0,y0,radius,startAngle, part);
         ctx.stroke();        
 }
+
+
 
 function CanvasState(canvas) {
   this.canvas = canvas;
   this.valid = false; 
-  var myState = this;
-  this.interval = 30;
+  var myState = this; 
+  this.interval = 30; // maybe this would be useful to remove black square appearing in mobile
   setInterval(function(){ myState.draw(); }, myState.interval);
 
 }
@@ -127,7 +133,7 @@ function CanvasState(canvas) {
 
 
 
-var moveSlider = function(element) {
+var moveSlider = function(element, radius) {
 
       //  var $slider = $('#slider-' + i);
     
@@ -141,7 +147,7 @@ var moveSlider = function(element) {
       //  var radius = diameter/2;
 
 
-        var radius = 70;
+        
         var radiusMax = radius + sliderH2;
         var radiusMin = radius - sliderH2;
 
@@ -158,16 +164,16 @@ var moveSlider = function(element) {
         var mdown = false;
 
         // Determine if a point is inside the shape's bounds
-        Circle.prototype.contains = function(x, y) {
+        var circleContains = function(x, y) {
                           
           return ((Math.sqrt((x-x0)*(x-x0) + (y-y0)*(y-y0))) <= radiusMax) && (Math.sqrt((x-x0)*(x-x0) + (y-y0)*(y-y0)) >= radiusMin);
           
         }
 
         var mouseHandler = function(event) {
-                          var mPos = {x: event.clientX-elPos.x-30, y: event.clientY-elPos.y-30}; // polozaj x in y koordinate miske
+                          var mPos = {x: event.clientX-elPos.x-(x0-radius), y: event.clientY-elPos.y-(x0-radius)}; // polozaj x in y koordinate miske
                            
-                           if (Circle.prototype.contains(event.clientX-elPos.x, event.clientY-elPos.y)) {
+                           if (circleContains(event.clientX-elPos.x, event.clientY-elPos.y)) {
                              // event.prevent default in stop propagation morda da se movementi ne razširijo preveč.
                              
                              console.log('client', event.clientX, event.clientY);
@@ -183,14 +189,14 @@ var moveSlider = function(element) {
 
                              clear();
 
-                             myCircle.draw(100, 100, 70, '#afb1b5');
-                             colorCircle('#9c6fdb', 70, part);                                                            
+                             drawCircle(radius);
+                             colorCircle('#9c6fdb', radius, part);                                                            
                               
                              X = Math.round(radius* Math.sin(deg*Math.PI/180));    
                              Y = Math.round(radius*  -Math.cos(deg*Math.PI/180));
                              
                             // cutSlider(100,30,9.5);
-                             drawSlider(X+100,Y+100); //add the center of circle coordinates
+                             drawSlider(X+x0,Y+y0); //add the center of circle coordinates
                                                     
 
                            
@@ -225,7 +231,9 @@ var moveSlider = function(element) {
 
       } 
 
-
+for (i=0; i < options.length; i++) {
+  document.body.onload(options[i].radius);
+}
 
 moveSlider($('#c-circle'));
 
