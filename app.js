@@ -125,6 +125,8 @@ function CanvasState(canvas) {
 
 
 
+
+
 var moveSlider = function(element) {
 
       //  var $slider = $('#slider-' + i);
@@ -162,13 +164,8 @@ var moveSlider = function(element) {
           
         }
 
-
-
-        $('#c-circle').click(function (event) { // later on add mousemove, mouseup and mousedown
-                        event.preventDefault();
-                        event.stopPropagation();
-                        if (mdown) {
-                           var mPos = {x: event.clientX-elPos.x-30, y: event.clientY-elPos.y-30}; // polozaj x in y koordinate miske
+        var mouseHandler = function(event) {
+                          var mPos = {x: event.clientX-elPos.x-30, y: event.clientY-elPos.y-30}; // polozaj x in y koordinate miske
                            
                            if (Circle.prototype.contains(event.clientX-elPos.x, event.clientY-elPos.y)) {
                              // event.prevent default in stop propagation morda da se movementi ne razširijo preveč.
@@ -201,7 +198,17 @@ var moveSlider = function(element) {
                              // PRINT DEGREES
                              $('input[name="angle"]').val(Math.ceil(deg));                            
                           } 
-                        }
+
+
+
+        }
+
+
+
+        $('#c-circle').click(function (event) { // later on add mousemove, mouseup and mousedown
+                        event.preventDefault();
+                        event.stopPropagation();
+                        mouseHandler(event);
                     });
         
         $('#c-circle').mousedown(function (event){ mdown = true; })
@@ -209,42 +216,10 @@ var moveSlider = function(element) {
                     .mousemove(function (event) {
                       event.preventDefault();
                       event.stopPropagation();
+
                       if (mdown) {
-                           event.preventDefault();
-                           var mPos = {x: event.clientX-elPos.x-30, y: event.clientY-elPos.y-30}; // polozaj x in y koordinate miske
-
-                           if (Circle.prototype.contains(event.clientX-elPos.x, event.clientY-elPos.y)) {
-                             // event.prevent default in stop propagation morda da se movementi ne razširijo preveč.
-                             
-                             console.log('client', event.clientX, event.clientY);
-                             console.log('mouseposition', mPos.x, mPos.y);
-                             var atan = Math.atan2(mPos.x-radius, mPos.y-radius); // Math.atan2() vrne kot med x osjo in točko (x,y)
-                             console.log('atan', atan);
-                             deg = -atan/(Math.PI/180) + 180; // final (0-360 positive) degrees from mouse position 
-                             console.log('-atan/(Math.PI/180)',-atan/(Math.PI/180));
-                             console.log('degrees', deg);
-                             
-                             
-                             var part = -0.5*Math.PI + deg * (Math.PI/180);
-
-                             clear();
-
-                             myCircle.draw(100, 100, 70, '#afb1b5');
-                            
-                             colorCircle('#9c6fdb', 70, part);                                                            
-                              
-                             X = Math.round(radius* Math.sin(deg*Math.PI/180));    
-                             Y = Math.round(radius*  -Math.cos(deg*Math.PI/180));
-                             
-                            // cutSlider(100,30,9.5);
-                             drawSlider(X+100,Y+100); //add the center of circle coordinates
-                                                    
-
-                           
-
-                             // PRINT DEGREES
-                             $('input[name="angle"]').val(Math.ceil(deg));                            
-                          }
+                           mouseHandler(event);     
+                     
                         }
                     });   
 
