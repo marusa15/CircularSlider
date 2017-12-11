@@ -14,7 +14,8 @@ var options = [
           category: 'Transport',
           part: -0.5*Math.PI,
           sliderX: x0,
-          sliderY: y0 - this.radius
+          sliderY: y0 - this.radius,
+          deg: 0
           
 	       },
          {
@@ -27,7 +28,8 @@ var options = [
           category: 'Food',
           part: -0.5*Math.PI,
           sliderX: x0,
-          sliderY: y0 - this.radius
+          sliderY: y0 - this.radius,
+          deg: 0
          },
          {
           container: 'con1',
@@ -39,7 +41,8 @@ var options = [
           category: 'Food',
           part: -0.5*Math.PI,
           sliderX: x0,
-          sliderY: y0 - this.radius
+          sliderY: y0 - this.radius,
+          deg: 0
          },
          {
           container: 'con1',
@@ -51,7 +54,8 @@ var options = [
           category: 'Food',
           part: -0.5*Math.PI,
           sliderX: x0,
-          sliderY: y0 - this.radius
+          sliderY: y0 - this.radius,
+          deg: 0
          },
          {
           container: 'con1',
@@ -63,7 +67,8 @@ var options = [
           category: 'Food',
           part: -0.5*Math.PI,
           sliderX: x0,
-          sliderY: y0 - this.radius
+          sliderY: y0 - this.radius,
+          deg: 0
          },
         ]
 
@@ -241,6 +246,7 @@ var moveSlider = function(element) {
                                options[index].part = part;
                                options[index].sliderX = X;
                                options[index].sliderY = Y;
+                               options[index].deg = Math.ceil(deg);
                                
                              }
 
@@ -256,16 +262,28 @@ var moveSlider = function(element) {
                               drawSlider(options[i].sliderX + x0, options[i].sliderY + y0); 
 
                              }
-                                                                
-                                                
-                           
+                             
+                               
+
+                             function displayValues(options, element) {
+                              var value = options.map(function(item, index) {
+                              return '<input id="value-'+ index +'" class="list-item" type="text" value="' + item.deg + 
+                              '" class="range" data-max="' + item.maxValue + '" data-min="' + item.minValue + '" data-step="' + item.step +
+                              '" name="angle">'
+                              });
+                              return  element.html(value); 
+                             }                   
                             
-                                                                           
+                             displayValues(options, $('#js-values'));
+
+                             for (i=0; i < options.length; i++) {
+                              $('input[id="value' + i +'"]').val();
+                             }
+                                                                     
 
                            
 
-                             // PRINT DEGREES
-                             $('input[name="angle"]').val(Math.ceil(deg));                            
+                                                       
                           } 
 
                           
