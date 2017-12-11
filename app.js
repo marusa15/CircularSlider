@@ -7,7 +7,8 @@ var options = [
       		step: '1',
       		radius: '30', //in pixels
           category: 'Transport',
-          clicked: 'false'
+          part: -0.5*Math.PI
+          
 	       },
          {
           container: 'con1',
@@ -17,7 +18,7 @@ var options = [
           step: '1',
           radius: '60',
           category: 'Food',
-          clicked: 'false'
+          part: -0.5*Math.PI
          },
          {
           container: 'con1',
@@ -27,21 +28,26 @@ var options = [
           step: '5',
           radius: '90',
           category: 'Food',
-          clicked: 'false'
+          part: -0.5*Math.PI
          }
         ]
 
 // state modification functions
+var sliderW2 = 4.75;
+var sliderH2 = 4.75;
+var radius;  
+var radiusMax = radius + sliderH2;
+var radiusMin = radius - sliderH2;
 
+         
 var clickCircle = function(options, item) {
    currentItem = getItem(options, item);
    options.Current = item;
    options[item].clicked = true;
 }
+
  
-function getItem(options, itemIndex) {
-    return options[itemIndex];    
- }
+
 
 
 var canvas = document.getElementById('c-circle');
@@ -130,26 +136,27 @@ function CanvasState(canvas) {
 }
 
 
+// event listeners
 
 
 
-var moveSlider = function(element, radius) {
 
-      //  var $slider = $('#slider-' + i);
+var moveSlider = function(element) {
+
+     
     
         var sliderW2 = 4.75;
-         // shrani v spremenljivko širino drsne ploščice brez enote in deli z dva (radij)
-        var sliderH2 = 4.75;  
-
+        var sliderH2 = 4.75;
+        
        
-        
-      //  var diameter = parseInt(options[itemIndex].radius, 10);
-      //  var radius = diameter/2;
+     
 
-
-        
         var radiusMax = radius + sliderH2;
         var radiusMin = radius - sliderH2;
+
+
+        
+        
 
         // centre of the circle coordinates
         var x0 = 100; 
@@ -163,18 +170,46 @@ var moveSlider = function(element, radius) {
         var X = 0, Y = 0;
         var mdown = false;
 
-        // Determine if a point is inside the shape's bounds
+        // Determine if a point is inside the circle's bounds
         var circleContains = function(x, y) {
                           
           return ((Math.sqrt((x-x0)*(x-x0) + (y-y0)*(y-y0))) <= radiusMax) && (Math.sqrt((x-x0)*(x-x0) + (y-y0)*(y-y0)) >= radiusMin);
           
         }
 
+        var whichCircle = function(event) {
+          var x = event.clientX-elPos.x;
+          var y = event.clientY-elPos.y;
+          
+          for (i=0; i < options.length; i++) {
+            var radiusMax = parseInt(options[i].radius) + parseInt(sliderH2);
+            var radiusMin = options[i].radius - sliderH2;
+           
+            if (((Math.sqrt((x-x0)*(x-x0) + (y-y0)*(y-y0))) <= radiusMax) && (Math.sqrt((x-x0)*(x-x0) + (y-y0)*(y-y0)) >= radiusMin)) {
+              var radius = options[i].radius;
+              console.log('recent radius', radius);
+              return radius;
+            }
+          }
+
+        }
+
+
+
+
+        console.log('options befor event', options);
         var mouseHandler = function(event) {
                           var mPos = {x: event.clientX-elPos.x-(x0-radius), y: event.clientY-elPos.y-(x0-radius)}; // polozaj x in y koordinate miske
                            
                            if (circleContains(event.clientX-elPos.x, event.clientY-elPos.y)) {
+
                              // event.prevent default in stop propagation morda da se movementi ne razširijo preveč.
+                            console.log('radius', radius, options);                             
+                            index = options.findIndex(x => x.radius==radius);
+                             
+                            console.log('radius', radius, index, options[index]);
+                                      
+                                                    
                              
                              console.log('client', event.clientX, event.clientY);
                              console.log('mouseposition', mPos.x, mPos.y);
@@ -183,14 +218,20 @@ var moveSlider = function(element, radius) {
                              deg = -atan/(Math.PI/180) + 180; // final (0-360 positive) degrees from mouse position 
                              console.log('-atan/(Math.PI/180)',-atan/(Math.PI/180));
                              console.log('degrees', deg);
+
                              
-                             
-                             var part = -0.5*Math.PI + deg * (Math.PI/180);
+                             console.log('before part', options[index].part);
+                          //   var part = -0.5*Math.PI + deg * (Math.PI/180);
+                             options[index].part = -0.5*Math.PI + deg * (Math.PI/180);
+                             console.log('after part', options[index].part);
+                             console.log(options);
 
                              clear();
+                             for (i=0; i < options.length; i++) {
+                              drawCircle(options[i].radius);
+                             }
 
-                             drawCircle(radius);
-                             colorCircle('#9c6fdb', radius, part);                                                            
+                             colorCircle('#9c6fdb', radius, options[index].part);                                                            
                               
                              X = Math.round(radius* Math.sin(deg*Math.PI/180));    
                              Y = Math.round(radius*  -Math.cos(deg*Math.PI/180));
@@ -205,6 +246,10 @@ var moveSlider = function(element, radius) {
                              $('input[name="angle"]').val(Math.ceil(deg));                            
                           } 
 
+                          else {
+                             
+                          }
+
 
 
         }
@@ -214,7 +259,8 @@ var moveSlider = function(element, radius) {
         $('#c-circle').click(function (event) { // later on add mousemove, mouseup and mousedown
                         event.preventDefault();
                         event.stopPropagation();
-                        mouseHandler(event);
+                      //  mouseHandler(event);
+                        whichCircle(event);
                     });
         
         $('#c-circle').mousedown(function (event){ mdown = true; })
@@ -224,7 +270,8 @@ var moveSlider = function(element, radius) {
                       event.stopPropagation();
 
                       if (mdown) {
-                           mouseHandler(event);     
+                        //   mouseHandler(event);
+                           whichCircle(event);     
                      
                         }
                     });   
@@ -232,10 +279,15 @@ var moveSlider = function(element, radius) {
       } 
 
 for (i=0; i < options.length; i++) {
+  console.log('length', options.length);
   document.body.onload(options[i].radius);
+//  moveSlider($('#c-circle'), options[i].radius);
+  
 }
 
 moveSlider($('#c-circle'));
+
+
 
 
 
