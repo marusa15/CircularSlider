@@ -162,12 +162,9 @@ function CanvasState(canvas) {
 
 
 var moveSlider = function(element) {
-      
         
 
-        // centre of the circle coordinates
-        var x0 = 100; 
-        var y0 = 100; 
+        
         var deg = 0;
         var elP = element.offset();  //razmisli, na kakšen drugi način bi se to dalo rešit
         var elPos = { x: elP.left, y: elP.top};   //dobi koordinate kvadrata 200x200 glede na dokument 
