@@ -1,3 +1,8 @@
+var canvas = document.getElementById('c-circle');
+x0 = canvas.width / 2;
+y0 = canvas.height / 2;
+
+
 var options = [
 	       {
       		container: 'con1',
@@ -7,7 +12,9 @@ var options = [
       		step: '1',
       		radius: '30', //in pixels
           category: 'Transport',
-          part: -0.5*Math.PI
+          part: -0.5*Math.PI,
+          sliderX: x0,
+          sliderY: y0 - this.radius
           
 	       },
          {
@@ -18,7 +25,9 @@ var options = [
           step: '1',
           radius: '60',
           category: 'Food',
-          part: -0.5*Math.PI
+          part: -0.5*Math.PI,
+          sliderX: x0,
+          sliderY: y0 - this.radius
          },
          {
           container: 'con1',
@@ -28,7 +37,9 @@ var options = [
           step: '5',
           radius: '90',
           category: 'Food',
-          part: -0.5*Math.PI
+          part: -0.5*Math.PI,
+          sliderX: x0,
+          sliderY: y0 - this.radius
          }
         ]
 
@@ -50,16 +61,14 @@ var clickCircle = function(options, item) {
 
 
 
-var canvas = document.getElementById('c-circle');
-x0 = canvas.width / 2;
-y0 = canvas.height / 2;
+
 
 // display functions
 
 document.body.onload = function(radius) {
 
   drawCircle(radius);
-  drawSlider(x0, x0 - radius); // (100, 30) is initial position 30 = 100 - radius
+  drawSlider(x0, y0 - radius); 
 
 
 };
@@ -142,20 +151,7 @@ function CanvasState(canvas) {
 
 
 var moveSlider = function(element) {
-
-     
-    
-        var sliderW2 = 4.75;
-        var sliderH2 = 4.75;
-        
-       
-     
-
-        var radiusMax = radius + sliderH2;
-        var radiusMin = radius - sliderH2;
-
-
-        
+      
         
 
         // centre of the circle coordinates
@@ -170,44 +166,56 @@ var moveSlider = function(element) {
         var X = 0, Y = 0;
         var mdown = false;
 
+
+        var radius;
+        var sliderW2 = 4.75;
+        var sliderH2 = 4.75;
+        
+       
+     
         // Determine if a point is inside the circle's bounds
         var circleContains = function(x, y) {
-                          
+          var radiusMax = parseInt(radius) + parseInt(sliderH2);
+          var radiusMin = radius - sliderH2;
+          console.log('bool', radiusMax);                
           return ((Math.sqrt((x-x0)*(x-x0) + (y-y0)*(y-y0))) <= radiusMax) && (Math.sqrt((x-x0)*(x-x0) + (y-y0)*(y-y0)) >= radiusMin);
           
         }
 
-        var whichCircle = function(event) {
+        function whichCircle (event) {
           var x = event.clientX-elPos.x;
           var y = event.clientY-elPos.y;
+
           
           for (i=0; i < options.length; i++) {
             var radiusMax = parseInt(options[i].radius) + parseInt(sliderH2);
             var radiusMin = options[i].radius - sliderH2;
            
             if (((Math.sqrt((x-x0)*(x-x0) + (y-y0)*(y-y0))) <= radiusMax) && (Math.sqrt((x-x0)*(x-x0) + (y-y0)*(y-y0)) >= radiusMin)) {
-              var radius = options[i].radius;
-              console.log('recent radius', radius);
-              return radius;
+              radius = options[i].radius;
+              
+           
+              
             }
           }
-
+          return radius;
         }
-
-
-
-
-        console.log('options befor event', options);
-        var mouseHandler = function(event) {
+   
+     
+       
+        var mouseHandler = function(event, radius) {
+                          
                           var mPos = {x: event.clientX-elPos.x-(x0-radius), y: event.clientY-elPos.y-(x0-radius)}; // polozaj x in y koordinate miske
-                           
-                           if (circleContains(event.clientX-elPos.x, event.clientY-elPos.y)) {
+                          var index = options.findIndex(x => x.radius==radius);
+                          console.log('mouseposition', mPos.x, mPos.y);
 
-                             // event.prevent default in stop propagation morda da se movementi ne razširijo preveč.
-                            console.log('radius', radius, options);                             
-                            index = options.findIndex(x => x.radius==radius);
+                           if (circleContains(event.clientX-elPos.x, event.clientY-elPos.y)) {
+                              console.log('hello');
                              
-                            console.log('radius', radius, index, options[index]);
+                              console.log('radius', radius, options);                             
+                           // index = options.findIndex(x => x.radius==radius);
+                             
+                         //   console.log('radius', radius, index, options[index]);
                                       
                                                     
                              
@@ -220,24 +228,41 @@ var moveSlider = function(element) {
                              console.log('degrees', deg);
 
                              
-                             console.log('before part', options[index].part);
-                          //   var part = -0.5*Math.PI + deg * (Math.PI/180);
-                             options[index].part = -0.5*Math.PI + deg * (Math.PI/180);
-                             console.log('after part', options[index].part);
-                             console.log(options);
-
-                             clear();
-                             for (i=0; i < options.length; i++) {
-                              drawCircle(options[i].radius);
-                             }
-
-                             colorCircle('#9c6fdb', radius, options[index].part);                                                            
-                              
+                            
+                             var part = -0.5*Math.PI + deg * (Math.PI/180);
                              X = Math.round(radius* Math.sin(deg*Math.PI/180));    
                              Y = Math.round(radius*  -Math.cos(deg*Math.PI/180));
+
+
+                             function updateState() {
+                              console.log('update', radius);
+                              // var index = options.findIndex(x => x.radius==radius);
+                               options[index].part = part;
+                               options[index].sliderX = X;
+                               options[index].sliderY = Y;
+                               console.log(options);
+
+
+                             }
+
+                             updateState();
                              
-                            // cutSlider(100,30,9.5);
-                             drawSlider(X+x0,Y+y0); //add the center of circle coordinates
+
+                             clear();
+
+                             for (i=0; i < options.length; i++) {
+                              drawCircle(options[i].radius);
+                              colorCircle(options[i].color, options[i].radius, options[i].part);
+                              
+                              drawSlider(options[i].sliderX + x0, options[i].sliderY + y0); 
+                                                        
+                             }
+
+                                                                                       
+                                                      
+                           
+                            
+                           //  drawSlider(X+x0,Y+y0); //add the center of circle coordinates
                                                     
 
                            
@@ -246,11 +271,7 @@ var moveSlider = function(element) {
                              $('input[name="angle"]').val(Math.ceil(deg));                            
                           } 
 
-                          else {
-                             
-                          }
-
-
+                          
 
         }
 
@@ -259,8 +280,9 @@ var moveSlider = function(element) {
         $('#c-circle').click(function (event) { // later on add mousemove, mouseup and mousedown
                         event.preventDefault();
                         event.stopPropagation();
-                      //  mouseHandler(event);
+                        
                         whichCircle(event);
+                        mouseHandler(event, radius);
                     });
         
         $('#c-circle').mousedown(function (event){ mdown = true; })
@@ -270,8 +292,9 @@ var moveSlider = function(element) {
                       event.stopPropagation();
 
                       if (mdown) {
-                        //   mouseHandler(event);
-                           whichCircle(event);     
+                           
+                           whichCircle(event);
+                           mouseHandler(event, radius);     
                      
                         }
                     });   
