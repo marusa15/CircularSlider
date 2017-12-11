@@ -40,7 +40,31 @@ var options = [
           part: -0.5*Math.PI,
           sliderX: x0,
           sliderY: y0 - this.radius
-         }
+         },
+         {
+          container: 'con1',
+          color: '#239fd1',
+          maxValue: '1000',
+          minValue: '250',
+          step: '5',
+          radius: '120',
+          category: 'Food',
+          part: -0.5*Math.PI,
+          sliderX: x0,
+          sliderY: y0 - this.radius
+         },
+         {
+          container: 'con1',
+          color: '#872fd8',
+          maxValue: '1000',
+          minValue: '250',
+          step: '5',
+          radius: '150',
+          category: 'Food',
+          part: -0.5*Math.PI,
+          sliderX: x0,
+          sliderY: y0 - this.radius
+         },
         ]
 
 // state modification functions
@@ -49,20 +73,7 @@ var sliderH2 = 4.75;
 var radius;  
 var radiusMax = radius + sliderH2;
 var radiusMin = radius - sliderH2;
-
-         
-var clickCircle = function(options, item) {
-   currentItem = getItem(options, item);
-   options.Current = item;
-   options[item].clicked = true;
-}
-
- 
-
-
-
-
-
+    
 // display functions
 
 document.body.onload = function(radius) {
@@ -210,13 +221,7 @@ var moveSlider = function(element) {
                           console.log('mouseposition', mPos.x, mPos.y);
 
                            if (circleContains(event.clientX-elPos.x, event.clientY-elPos.y)) {
-                              console.log('hello');
-                             
-                              console.log('radius', radius, options);                             
-                           // index = options.findIndex(x => x.radius==radius);
-                             
-                         //   console.log('radius', radius, index, options[index]);
-                                      
+                                                                
                                                     
                              
                              console.log('client', event.clientX, event.clientY);
@@ -235,14 +240,11 @@ var moveSlider = function(element) {
 
 
                              function updateState() {
-                              console.log('update', radius);
-                              // var index = options.findIndex(x => x.radius==radius);
+                                                           
                                options[index].part = part;
                                options[index].sliderX = X;
                                options[index].sliderY = Y;
-                               console.log(options);
-
-
+                               
                              }
 
                              updateState();
@@ -255,15 +257,13 @@ var moveSlider = function(element) {
                               colorCircle(options[i].color, options[i].radius, options[i].part);
                               
                               drawSlider(options[i].sliderX + x0, options[i].sliderY + y0); 
-                                                        
-                             }
 
-                                                                                       
-                                                      
+                             }
+                                                                
+                                                
                            
                             
-                           //  drawSlider(X+x0,Y+y0); //add the center of circle coordinates
-                                                    
+                                                                           
 
                            
 
@@ -304,7 +304,7 @@ var moveSlider = function(element) {
 for (i=0; i < options.length; i++) {
   console.log('length', options.length);
   document.body.onload(options[i].radius);
-//  moveSlider($('#c-circle'), options[i].radius);
+
   
 }
 
