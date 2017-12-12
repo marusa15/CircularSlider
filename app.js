@@ -236,11 +236,10 @@ var moveSlider = function(element) {
                     options[index].sliderY = Y;
                     options[index].deg = Math.ceil(deg);                                       
                 }
-
                 
 
                 updateState();
-                console.log(options);               
+                    
                 clear();
 
 
@@ -250,45 +249,51 @@ var moveSlider = function(element) {
                               colorCircle(options[i].color, options[i].radius, options[i].part);
                               drawSlider(options[i].sliderX + x0, options[i].sliderY + y0); 
 
-
                     }    
                                  
             }
-            function displayValues(options, element) {
-                              var value = options.map(function(item, index) {
-                              item.cost = parseInt((parseInt(item.deg) / 360)*(item.maxValue - item.minValue)); 
-                              
-                              return '<div><input id="value-'+ index +'" class="list-item" style="border:0px" type="text" value="$' + item.cost + 
-                              '" class="range" data-max="' + item.maxValue + '" data-min="' + item.minValue + '" data-step="' + item.step +
-                              '" name="angle"><span class="category-'+ index +'" style="color:' + item.color + '">' + item.category +'</span></div>'
-                              });
-                              return  element.html(value); 
-                             }                   
-                            
-                             displayValues(options, $('#js-values'));
+             function displayValues(options, element) {
+                var value = options.map(function(item, index) {
+                                  item.cost = parseInt((parseInt(item.deg) / 360)*(item.maxValue - item.minValue)); 
+                                  
+                                  return '<div><input id="value-'+ index +'" class="list-item" style="border:0px" type="text" value="$' + item.cost + 
+                                  '" class="range" data-max="' + item.maxValue + '" data-min="' + item.minValue + '" data-step="' + item.step +
+                                  '" name="angle"><span class="category-'+ index +'" style="color:' + item.color + '">' + item.category +'</span></div>'
+                                  });
+                                  return  element.html(value); 
+                                 }                   
+                                
+                                 displayValues(options, $('#js-values'));
 
 
 
-                             for (i=0; i < options.length; i++) {
-                              
-                              $('input[id="value' + i +'"]').val();
-                            }     
-
-    
+                                 for (i=0; i < options.length; i++) {
+                                  
+                                  $('input[id="value' + i +'"]').val();
+                                }                        
+             
         } 
 
-                                              
-                             
-       
+             function displayValues(options, element) {
+                var value = options.map(function(item, index) {
+                                  item.cost = parseInt((parseInt(item.deg) / 360)*(item.maxValue - item.minValue)); 
+                                  
+                                  return '<div><input id="value-'+ index +'" class="list-item" style="border:0px" type="text" value="$' + item.cost + 
+                                  '" class="range" data-max="' + item.maxValue + '" data-min="' + item.minValue + '" data-step="' + item.step +
+                                  '" name="angle"><span class="category-'+ index +'" style="color:' + item.color + '">' + item.category +'</span></div>'
+                                  });
+                                  return  element.html(value); 
+                                 }                   
+                                
+                                 displayValues(options, $('#js-values'));
 
 
 
-
-        
-
-       
-
-
+                                 for (i=0; i < options.length; i++) {
+                                  
+                                  $('input[id="value' + i +'"]').val();
+                                }                       
+  
          $('#default').click(function (event) { // later on add mousemove, mouseup and mousedown
                         event.preventDefault();
                         event.stopPropagation();
