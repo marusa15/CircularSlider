@@ -1,4 +1,5 @@
-var canvas = document.getElementById('c-circle');
+var canvas = document.getElementById('default');
+//var canvas2 = document.getElementById('canvas-2');
 x0 = canvas.width / 2;
 y0 = canvas.height / 2;
 var sliderW2 = 4.75;
@@ -10,21 +11,21 @@ var radiusMin = radius - sliderH2;
 
 var options = [
 	       {
-  		  container: 'con1',
-  		  color: 'blue',
-  		  maxValue: '100',
-  		  minValue: '0',
-  		  step: '1',
-  		  radius: '30', //in pixels
-          category: 'Transport',
-          part: -0.5*Math.PI,
-          sliderX: x0,
-          sliderY: y0 - this.radius,
-          deg: 0
+      		container: 'default',
+      		color: 'blue',
+      		maxValue: '100',
+      		minValue: '0',
+      		step: '1',
+      		radius: '30', //in pixels
+            category: 'Transport',
+            part: -0.5*Math.PI,
+            sliderX: x0,
+            sliderY: y0 - this.radius,
+            deg: 0
           
 	       },
          {
-          container: 'con1',
+          container: 'default',
           color: 'green',
           maxValue: '1000',
           minValue: '250',
@@ -37,7 +38,7 @@ var options = [
           deg: 0
          },
          {
-          container: 'con1',
+          container: 'default',
           color: 'red',
           maxValue: '1000',
           minValue: '250',
@@ -50,7 +51,7 @@ var options = [
           deg: 0
          },
          {
-          container: 'con1',
+          container: 'default',
           color: '#239fd1',
           maxValue: '1000',
           minValue: '250',
@@ -63,7 +64,7 @@ var options = [
           deg: 0
          },
          {
-          container: 'con1',
+          container: 'default',
           color: '#872fd8',
           maxValue: '1000',
           minValue: '250',
@@ -85,8 +86,47 @@ var options = [
 
 
 
+
+
+function setCanvas() {
+    var canvasArray = [];
+    var uniqueCanvases = [];
+
+    for (i=0; i < options.length; i++) {
+        if (options[i].container != 'default') {
+            canvasArray.push(options[i].container);
+        }
+    }
+
+
+    function eliminateDuplicates(canvasArray) {
+      var i,
+          len=canvasArray.length,
+          obj={};
+
+      for (i=0;i<len;i++) {
+        obj[canvasArray[i]]=0;
+      }
+      for (i in obj) {
+        uniqueCanvases.push(i);
+      }
+      
+      return uniqueCanvases;
+    }
+
+    eliminateDuplicates(canvasArray);
+
+
+    for (i=0; i < uniqueCanvases.length; i++) {
+        
+        $('.js-container').append('<canvas id="' + uniqueCanvases[i] + '" width="320" height="320">This text is displayed if your browser does not support HTML5 Canvas.</canvas>'+
+             '<div class="instructions">ADJUST DIAL TO ENTER EXPENSES</div>');
+
+    }      
+}      
+ 
 function drawCircle(radius) {
-        var canvas = document.getElementById('c-circle');
+        var canvas = document.getElementById('default');
         var ctx = canvas.getContext('2d');
             
      
@@ -102,7 +142,7 @@ function drawCircle(radius) {
 
        
 function drawSlider(X,Y) {
-        var canvas = document.getElementById('c-circle');
+        var canvas = document.getElementById('default');
         var ctx = canvas.getContext('2d');
 
         
@@ -123,7 +163,7 @@ function drawSlider(X,Y) {
 
 
 function clear() {
-    var canvas = document.getElementById('c-circle');
+    var canvas = document.getElementById('default');
     var ctx = canvas.getContext('2d');
   
     ctx.clearRect(0,0, canvas.width, canvas.height);
@@ -132,7 +172,7 @@ function clear() {
 
         
 function colorCircle(hue, radius, part) {
-        var canvas = document.getElementById('c-circle');
+        var canvas = document.getElementById('default');
         var ctx = canvas.getContext('2d');
         
         var startAngle = -0.5*Math.PI;
@@ -150,10 +190,8 @@ function colorCircle(hue, radius, part) {
 
 
 var moveSlider = function(element) {
-     //   var deg = 0;
         var elP = element.offset();  //razmisli, na kakšen drugi način bi se to dalo rešit
         var elPos = { x: elP.left, y: elP.top};   //dobi koordinate kvadrata 200x200 glede na dokument 
-    //    var X = 0, Y = 0;
         var mdown = false;
 
 
@@ -210,7 +248,7 @@ var moveSlider = function(element) {
             }                  
         } 
 
-         $('#c-circle').click(function (event) { // later on add mousemove, mouseup and mousedown
+         $('#default').click(function (event) { // later on add mousemove, mouseup and mousedown
                         event.preventDefault();
                         event.stopPropagation();
                         
@@ -218,7 +256,7 @@ var moveSlider = function(element) {
                         mouseHandler(event, radius);
                     });
         
-        $('#c-circle').mousedown(function (event){ mdown = true; })
+        $('#default').mousedown(function (event){ mdown = true; })
                     .mouseup(function (event) { mdown = false; })
                     .mousemove(function (event) {
                       event.preventDefault();
@@ -235,17 +273,20 @@ var moveSlider = function(element) {
 
 document.body.onload = function(radius) {
 
+
   drawCircle(radius);
+
   drawSlider(x0, y0 - radius); 
 
 };
 
 for (i=0; i < options.length; i++) {
-  console.log('length', options.length);
-  document.body.onload(options[i].radius);
+    document.body.onload(options[i].radius);
 }
 
-moveSlider($('#c-circle'));                             
+moveSlider($('#default'));
+
+setCanvas();                             
                             
                              
 
