@@ -1,10 +1,10 @@
 var canvas = document.getElementById('default');
-//var canvas2 = document.getElementById('canvas-2');
 x0 = canvas.width / 2;
 y0 = canvas.height / 2;
 var sliderW2 = 4.75;
 var sliderH2 = 4.75;
-var radius;  
+var radius; 
+ 
 var radiusMax = radius + sliderH2;
 var radiusMin = radius - sliderH2;
 
@@ -16,13 +16,13 @@ var options = [
       		maxValue: '100',
       		minValue: '0',
       		step: '1',
-      		radius: '30', //in pixels
+      		radius: '150', //in pixels
             category: 'Transport',
             part: -0.5*Math.PI,
             sliderX: x0,
             sliderY: y0 - this.radius,
             deg: 0
-          
+                     
 	       },
          {
           container: 'default',
@@ -30,7 +30,7 @@ var options = [
           maxValue: '1000',
           minValue: '250',
           step: '1',
-          radius: '60',
+          radius: '120',
           category: 'Food',
           part: -0.5*Math.PI,
           sliderX: x0,
@@ -44,7 +44,7 @@ var options = [
           minValue: '250',
           step: '5',
           radius: '90',
-          category: 'Food',
+          category: 'Insurance',
           part: -0.5*Math.PI,
           sliderX: x0,
           sliderY: y0 - this.radius,
@@ -56,8 +56,8 @@ var options = [
           maxValue: '1000',
           minValue: '250',
           step: '5',
-          radius: '120',
-          category: 'Food',
+          radius: '60',
+          category: 'Health care',
           part: -0.5*Math.PI,
           sliderX: x0,
           sliderY: y0 - this.radius,
@@ -66,10 +66,10 @@ var options = [
          {
           container: 'default',
           color: '#872fd8',
-          maxValue: '1000',
-          minValue: '250',
+          maxValue: '100',
+          minValue: '0',
           step: '5',
-          radius: '150',
+          radius: '30',
           category: 'Food',
           part: -0.5*Math.PI,
           sliderX: x0,
@@ -83,10 +83,6 @@ var options = [
 
     
 // display functions
-
-
-
-
 
 function setCanvas() {
     var canvasArray = [];
@@ -115,6 +111,7 @@ function setCanvas() {
     }
 
     eliminateDuplicates(canvasArray);
+    
 
 
     for (i=0; i < uniqueCanvases.length; i++) {
@@ -123,8 +120,8 @@ function setCanvas() {
              '<div class="instructions">ADJUST DIAL TO ENTER EXPENSES</div>');
 
     }      
-}      
- 
+} 
+       
 function drawCircle(radius) {
         var canvas = document.getElementById('default');
         var ctx = canvas.getContext('2d');
@@ -192,7 +189,9 @@ function colorCircle(hue, radius, part) {
 var moveSlider = function(element) {
         var elP = element.offset();  //razmisli, na kakšen drugi način bi se to dalo rešit
         var elPos = { x: elP.left, y: elP.top};   //dobi koordinate kvadrata 200x200 glede na dokument 
+        console.log(elPos.x, elPos.y);
         var mdown = false;
+        var deg = 0;
 
 
         function circleContains(x, y) { // Determine if a point is inside the circle's bounds
@@ -236,17 +235,51 @@ var moveSlider = function(element) {
                     options[index].sliderX = X;
                     options[index].sliderY = Y;
                     options[index].deg = Math.ceil(deg);                                       
-                }          
-                updateState();               
-                clear();             
+                }
+
+                
+
+                updateState();
+                console.log(options);               
+                clear();
+
+
 
                 for (i=0; i < options.length; i++) {
                               drawCircle(options[i].radius);
                               colorCircle(options[i].color, options[i].radius, options[i].part);
                               drawSlider(options[i].sliderX + x0, options[i].sliderY + y0); 
-                    }                          
-            }                  
+
+                    }    
+                                 
+            }
+            function displayValues(options, element) {
+                              var value = options.map(function(item, index) {
+                              item.cost = parseInt((parseInt(item.deg) / 360)*(item.maxValue - item.minValue)); 
+                              
+                              return '<div><input id="value-'+ index +'" class="list-item" style="border:0px" type="text" value="$' + item.cost + 
+                              '" class="range" data-max="' + item.maxValue + '" data-min="' + item.minValue + '" data-step="' + item.step +
+                              '" name="angle"><span class="category-'+ index +'" style="color:' + item.color + '">' + item.category +'</span></div>'
+                              });
+                              return  element.html(value); 
+                             }                   
+                            
+                             displayValues(options, $('#js-values'));
+
+
+
+                             for (i=0; i < options.length; i++) {
+                              
+                              $('input[id="value' + i +'"]').val();
+                            }     
+
+    
         } 
+
+        
+
+       
+
 
          $('#default').click(function (event) { // later on add mousemove, mouseup and mousedown
                         event.preventDefault();
@@ -277,6 +310,8 @@ document.body.onload = function(radius) {
   drawCircle(radius);
 
   drawSlider(x0, y0 - radius); 
+
+  
 
 };
 
