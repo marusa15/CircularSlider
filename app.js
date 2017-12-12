@@ -192,6 +192,7 @@ function colorCircle(hue, radius, part) {
 var moveSlider = function(element) {
         var elP = element.offset();  //razmisli, na kakšen drugi način bi se to dalo rešit
         var elPos = { x: elP.left, y: elP.top};   //dobi koordinate kvadrata 200x200 glede na dokument 
+        console.log(elPos.x, elPos.y);
         var mdown = false;
 
 
@@ -246,7 +247,9 @@ var moveSlider = function(element) {
                               drawSlider(options[i].sliderX + x0, options[i].sliderY + y0); 
                     }                          
             }                  
-        } 
+        }
+
+
 
          $('#default').click(function (event) { // later on add mousemove, mouseup and mousedown
                         event.preventDefault();
