@@ -250,6 +250,7 @@ var moveSlider = function(element) {
                               colorCircle(options[i].color, options[i].radius, options[i].part);
                               drawSlider(options[i].sliderX + x0, options[i].sliderY + y0); 
 
+
                     }    
                                  
             }
@@ -275,6 +276,13 @@ var moveSlider = function(element) {
 
     
         } 
+
+                                              
+                             
+       
+
+
+
 
         
 
