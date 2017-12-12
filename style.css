@@ -7,14 +7,8 @@ main {
 }
 
 
-
-/*.wrapper {
-    margin-left: auto;
-    margin-right: auto;
-} */
-
 .container {
-	  background: #eeeaef; /* For browsers that do not support gradients */
+	background: #eeeaef; /* For browsers that do not support gradients */
     background: -webkit-linear-gradient(#eeeaef, #bdbcc6); /* For Safari 5.1 to 6.0 */
     background: -o-linear-gradient(#eeeaef, #bdbcc6); /* For Opera 11.1 to 12.0 */
     background: -moz-linear-gradient(#eeeaef, #bdbcc6); /* For Firefox 3.6 to 15 */
@@ -42,8 +36,12 @@ main {
 
 .instructions {
     margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
     font-style: italic;
-    max-width: 230px;
+    max-width: 320px;
+    font-size: smaller;
+    font-weight: bold;
 }
 
 #circle-1 {
