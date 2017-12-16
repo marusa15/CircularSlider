@@ -1,6 +1,11 @@
+'use strict';
+
 var canvas = document.getElementById('default');
-x0 = canvas.width / 2;
-y0 = canvas.height / 2;
+var x0 = canvas.width / 2;
+var y0 = canvas.height / 2;
+var i;
+var X;
+var Y;
 var sliderW2 = 4.75;
 var sliderH2 = 4.75;
 var radius; 
@@ -77,11 +82,7 @@ var options = [
           deg: 0
          },
         ]
-
-// state modification functions
-
-
-    
+   
 // display functions
 
 function setCanvas() {
@@ -139,6 +140,7 @@ function drawCircle(radius) {
 
        
 function drawSlider(X,Y) {
+
         var canvas = document.getElementById('default');
         var ctx = canvas.getContext('2d');
 
