@@ -85,6 +85,9 @@ var options = [
    
 // display functions
 
+//fixes a problem where double clicking causes text to get selected on the canvas
+canvas.addEventListener('selectstart', function(event) { event.preventDefault(); return false; }, false);
+
 function setCanvas() {
     var canvasArray = [];
     var uniqueCanvases = [];
