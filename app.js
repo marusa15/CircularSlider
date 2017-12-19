@@ -1,14 +1,17 @@
 'use strict';
 
 var canvas = document.getElementById('default');
-var x0 = canvas.width / 2;
-var y0 = canvas.height / 2;
+var x0 = parseInt(canvas.width) / 2;
+var y0 = parseInt(canvas.height) / 2;
 var i;
 var X;
 var Y;
 var sliderW2 = 4.75;
 var sliderH2 = 4.75;
 var radius; 
+
+console.log('x0', x0);
+console.log('y0', y0);
  
 var radiusMax = radius + sliderH2;
 var radiusMin = radius - sliderH2;
@@ -24,8 +27,8 @@ var options = [
       		radius: '150', //in pixels
             category: 'Transport',
             part: -0.5*Math.PI,
-            sliderX: x0,
-            sliderY: y0 - this.radius,
+            sliderX: 0,
+            sliderY: -150,
             deg: 0
                      
 	       },
@@ -38,8 +41,8 @@ var options = [
           radius: '120',
           category: 'Food',
           part: -0.5*Math.PI,
-          sliderX: x0,
-          sliderY: y0 - this.radius,
+          sliderX: 0,
+          sliderY: -120,
           deg: 0
          },
          {
@@ -51,8 +54,8 @@ var options = [
           radius: '90',
           category: 'Insurance',
           part: -0.5*Math.PI,
-          sliderX: x0,
-          sliderY: y0 - this.radius,
+          sliderX: 0,
+          sliderY: -90,
           deg: 0
          },
          {
@@ -64,8 +67,8 @@ var options = [
           radius: '60',
           category: 'Health care',
           part: -0.5*Math.PI,
-          sliderX: x0,
-          sliderY: y0 - this.radius,
+          sliderX: 0,
+          sliderY: -60,
           deg: 0
          },
          {
@@ -77,8 +80,8 @@ var options = [
           radius: '30',
           category: 'Food',
           part: -0.5*Math.PI,
-          sliderX: x0,
-          sliderY: y0 - this.radius,
+          sliderX: 0,
+          sliderY: -30,
           deg: 0
          },
         ]
@@ -248,14 +251,13 @@ var moveSlider = function(element) {
                 clear();
 
 
-
+                console.log(options);
                 for (i=0; i < options.length; i++) {
                               drawCircle(options[i].radius);
                               colorCircle(options[i].color, options[i].radius, options[i].part);
-                              drawSlider(options[i].sliderX + x0, options[i].sliderY + y0); 
-
-                    }    
-                                 
+                              drawSlider(options[i].sliderX + x0, options[i].sliderY + y0);
+                    }                           
+                          
             }
              function displayValues(options, element) {
                 var value = options.map(function(item, index) {
